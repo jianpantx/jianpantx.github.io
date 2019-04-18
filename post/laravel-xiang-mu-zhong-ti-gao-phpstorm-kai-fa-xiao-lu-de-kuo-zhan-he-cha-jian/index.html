@@ -1,0 +1,205 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>laravel项目中提高phpstorm开发效率的扩展和插件 | 键盘同学</title>
+<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1555572293980">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://jianpantx.github.io">
+  <img class="avatar" src="https://jianpantx.github.io/images/avatar.png?v=1555572293980" alt="">
+  </a>
+  <h1 class="site-title">
+    键盘同学
+  </h1>
+  <p class="site-description">
+    刻意练习，只有变秃才能变强
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/jianpantx" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+      
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              laravel项目中提高phpstorm开发效率的扩展和插件
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-04-18 ·
+              </time>
+              
+                <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="post-tags">
+                  # php
+                </a>
+              
+                <a href="https://jianpantx.github.io/tag/laravel" class="post-tags">
+                  # laravel
+                </a>
+              
+                <a href="https://jianpantx.github.io/tag/phpstrom" class="post-tags">
+                  # phpstorm
+                </a>
+              
+            </div>
+            
+              <div class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/laravel-xiang-mu-zhong-ti-gao-phpstorm-kai-fa-xiao-lu-de-kuo-zhan-he-cha-jian.png')">
+              </div>
+            
+            <div class="post-content">
+              <p>文章会列出一些在phpstorm开发中可以给我带来许多phpstorm插件和开发laravel的扩展，会不断补充和修改
+下面是我自己phpstorm中使用的插件
+1.Material Theme UI  界面美化
+2.translation               翻译
+3.rainbow brackets    使用不颜色来区分不同层级的括号
+4.ideavim                   想在打代码的时候使用vim模式的可以安装
+5.key promoter X       提示当前一些操作的快捷键  方便记忆快捷键
+.
+.
+.
+未完待续</p>
+<p>以下是laravel扩展</p>
+<h3 id="一-laravel-ide-helper">一、Laravel-ide-helper</h3>
+<p>laravel在不安装插件的情况下，phpstorm开发的代码提示和方法的跳转很不友好，会看到很多方法下面有很多波浪线，这对于有强迫症的人是坚决不能忍受的。安装Laravel-ide-helper这个扩展可以帮我们解决这些问题。</p>
+<h4 id="安装">安装</h4>
+<p>在安装了composer的情况下，执行安装命令：</p>
+<pre><code>composer require barryvdh/laravel-ide-helper --dev
+</code></pre>
+<h4 id="将扩展的服务提供者添加到configappphp中的providers数组中">将扩展的服务提供者添加到config/app.php中的providers数组中</h4>
+<pre><code>Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+</code></pre>
+<h4 id="也可以在laravel中的register中添加以下代码而不需要在configappphp添加">也可以在laravel中的register()中添加以下代码，而不需要在config/app.php添加</h4>
+<pre><code>public function register()
+{
+    if ($this-&gt;app-&gt;environment() !== 'production') {
+        $this-&gt;app-&gt;register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+    }
+    // ...
+}
+</code></pre>
+<h4 id="facades生成phpdoc在项目会生成一个_ide_helperphp文件">facades生成phpDoc，在项目会生成一个_ide_helper.php文件</h4>
+<pre><code>php artisan ide-helper:generate
+</code></pre>
+<p>这样就完成全部安装，prefect！👏</p>
+<h3 id="二-laravel-debugbar">二、Laravel Debugbar</h3>
+<p>以前用tp开发的时候，都会用到调试工具栏，laravel怎么可能没有，而且比trace好看多了，哈哈哈~ 😎</p>
+<h4 id="使用composer安装">使用composer安装：</h4>
+<pre><code>composer require barryvdh/laravel-debugbar --dev
+</code></pre>
+<h4 id="将服务提供者类添加到configappphp中的provider数组">将服务提供者类添加到config/app.php中的provider数组</h4>
+<pre><code>Barryvdh\Debugbar\ServiceProvider::class,
+</code></pre>
+<h4 id="如果要使用facade记录消息请将其添加到appphp中的外观中">如果要使用Facade记录消息，请将其添加到app.php中的外观中：</h4>
+<pre><code>'Debugbar' =&gt; Barryvdh\Debugbar\Facade::class,
+</code></pre>
+<p>最后，确定配置中APP_DEBUG是true，在浏览器访问项目就可以使用了</p>
+
+            </div>
+          </article>
+        </div>
+    
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://jianpantx.github.io/post/1">
+              <h3 class="post-title">
+                博客的第一篇文章
+              </h3>
+            </a>
+          </div>  
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '12b09a701e2f9fc1bf79',
+    clientSecret: 'ee0e634fd29019bb6d0b6d9cd3d4b88e0016ecee',
+    repo: 'jianpantx.github.io',
+    owner: 'jianpantx',
+    admin: ['jianpantx'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+    
+        <div class="site-footer">
+  
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
