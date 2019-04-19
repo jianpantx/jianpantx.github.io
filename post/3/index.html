@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>键盘同学</title>
+<title>在开发中遇到关于PHP_EOL的问题 | 键盘同学</title>
 <meta name="description" content="刻意练习，只有变秃才能变强">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -12,6 +12,12 @@
 <link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1555676355141">
 <link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
 
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
 
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -103,76 +109,66 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://jianpantx.github.io/post/3">
-                  <h2 class="post-title">在开发中遇到关于PHP_EOL的问题</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-19
-                </div>
-                <div class="post-abstract">
-                  <p>✔今天在开发中使用PHP_EOL不换行的问题，之前只知道是用于换行，是php的一个预定义常量，对PHP_EOL的使用场景也没什么研究。今天根据自己的查阅结果记录下来，加深以下记忆。</p>
-
-                </div>
+          <div class="post-detail">
+            <h2 class="post-title">在开发中遇到关于PHP_EOL的问题</h2>
+            <div class="post-date">2019-04-19</div>
+            
+              <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/3.png')">
               </div>
-              
-                <a class="right" href="https://jianpantx.github.io/post/3">
-                  <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/3.png')">
-                  </div>
-                </a>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
+            
+            <div class="post-content">
+              <p>✔今天在开发中使用PHP_EOL不换行的问题，之前只知道是用于换行，是php的一个预定义常量，对PHP_EOL的使用场景也没什么研究。今天根据自己的查阅结果记录下来，加深以下记忆。</p>
+<!-- more -->
+<p>首先，PHP_EOL在不同平台输出的结果是不一样的</p>
+<pre><code>echo PHP_EOL;
+//windows平台相当于    echo &quot;\r\n&quot;;
+//unix\linux平台相当于    echo &quot;\n&quot;;
+//mac平台相当于    echo &quot;\r&quot;;
+</code></pre>
+<p>PHP_EOL的目的是自动为不同平台选择正确的字符，在终端上显示是可以正常的，但如果是在浏览器html则不能换行，是一个空格的效果。你需要在使用<code>&lt;pre&gt;</code>，或者使用php提供了nl2br这个字符串函数，能对字符串中所有新行之前插入<code>&lt;br&gt;</code>或<code>&lt;br /&gt;</code>,效果看上去就是把<code>\n、\r\n、\r</code>替换，达到目标效果。</p>
+<pre><code>&lt;?php
+$a =  'hello'.PHP_EOL.'world';
+
+echo $a;
+echo '&lt;hr /&gt;';
+echo nl2br($a);
+echo '&lt;hr /&gt;';
+echo '&lt;pre&gt;';
+echo $a;
+</code></pre>
+<p>输出结果：
+<img src="https://jianpantx.github.io/post-images/1555675861342.png" alt=""></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="tag">
+                    php
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
                 <a href="https://jianpantx.github.io/post/2">
-                  <h2 class="post-title">laravel项目中提高phpstorm开发效率的扩展和插件</h2>
+                  <h3 class="post-title">
+                    laravel项目中提高phpstorm开发效率的扩展和插件
+                  </h3>
                 </a>
-                <div class="post-date">
-                  2019-04-18
-                </div>
-                <div class="post-abstract">
-                  <p>🎈文章会列出一些在phpstorm开发中可以给我带来许多phpstorm插件和开发laravel的扩展，会不断补充和修改
-下面是我自己phpstorm中使用的插件</p>
-
-                </div>
               </div>
-              
-                <a class="right" href="https://jianpantx.github.io/post/2">
-                  <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/2.jpg')">
-                  </div>
-                </a>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://jianpantx.github.io/post/1">
-                  <h2 class="post-title">博客的第一篇文章</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-17
-                </div>
-                <div class="post-abstract">
-                  <p>🌈很久之前就想搭建一个自己的博客，前端用vue，后端用laravel，但是一直没有找到合适的vue博客样式，自己对写样式极其讨厌，再加上选择困难症，一拖再拖。哈哈哈，这应该是给自己的拖延症找借口吧。</p>
+            
 
-                </div>
-              </div>
+            
               
-                <a class="right" href="https://jianpantx.github.io/post/1">
-                  <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/1.png')">
-                  </div>
-                </a>
+                <div id="gitalk-container" data-aos="fade-in"></div>
               
-            </article>
-          
 
-          <div class="pagination-container">
-  
-  
-</div>
+              
+            
+
+          </div>
 
         </div>
       </div>
@@ -194,6 +190,29 @@ var app = new Vue({
 })
 
 </script>
+
+
+  
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '12b09a701e2f9fc1bf79',
+        clientSecret: 'ee0e634fd29019bb6d0b6d9cd3d4b88e0016ecee',
+        repo: 'jianpantx.github.io',
+        owner: 'jianpantx',
+        admin: ['jianpantx'],
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
 
 
 
