@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>laravel项目中提高phpstorm开发效率的扩展和插件 | 键盘同学</title>
+<title>vagrant+homestead+phpstorm+xdebug调试laravel | 键盘同学</title>
 <meta name="description" content="刻意练习，只有变秃才能变强">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -110,85 +110,50 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">laravel项目中提高phpstorm开发效率的扩展和插件</h2>
-            <div class="post-date">2019-04-18</div>
-            
-              <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/2.jpg')">
-              </div>
+            <h2 class="post-title">vagrant+homestead+phpstorm+xdebug调试laravel</h2>
+            <div class="post-date">2019-04-20</div>
             
             <div class="post-content">
-              <p>🎈文章会列出一些在phpstorm开发中可以给我带来许多phpstorm插件和开发laravel的扩展，会不断补充和修改
-下面是我自己phpstorm中使用的插件</p>
+              <p>🐱‍👤Xdebug是php的调试神器，之前也安装使用过，但是本地开发环境是phpstudy。现在基本上都在用vagrant+homestead来本地开发，所以要重新搭。在安装过程中，也是踩了好几个坑，装好的时候心里是奔溃的...</p>
 <!-- more -->
-<p>1.Material Theme UI  界面美化
-2.translation               翻译
-3.rainbow brackets    使用不颜色来区分不同层级的括号
-4.ideavim                   想在打代码的时候使用vim模式的可以安装
-5.key promoter X       提示当前一些操作的快捷键  方便记忆快捷键
-.
-.
-.
-未完待续</p>
-<p>以下是laravel扩展</p>
-<h3 id="一-laravel-ide-helper">一、Laravel-ide-helper</h3>
-<p>laravel在不安装插件的情况下，phpstorm开发的代码提示和方法的跳转很不友好，会看到很多方法下面有很多波浪线，这对于有强迫症的人是坚决不能忍受的。安装Laravel-ide-helper这个扩展可以帮我们解决这些问题。</p>
-<h4 id="安装">安装</h4>
-<p>在安装了composer的情况下，执行安装命令：</p>
-<pre><code>composer require barryvdh/laravel-ide-helper --dev
+<h3 id="xdebug安装">Xdebug安装</h3>
+<ol>
+<li>首先用git拉取源码安装</li>
+</ol>
+<pre><code>git clone https://github.com/xdebug/xdebug.git
 </code></pre>
-<h4 id="将扩展的服务提供者添加到configappphp中的providers数组中">将扩展的服务提供者添加到config/app.php中的providers数组中</h4>
-<pre><code>Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+<ol start="2">
+<li>进入目录，切换到最新版本的分支，这个可以在gitub上看最新的分支然后切换，我这里最新的是Xdebug_2_7</li>
+</ol>
+<pre><code>git checkout  xdebug_2_7
 </code></pre>
-<h4 id="也可以在laravel中的register中添加以下代码而不需要在configappphp添加">也可以在laravel中的register()中添加以下代码，而不需要在config/app.php添加</h4>
-<pre><code>public function register()
-{
-    if ($this-&gt;app-&gt;environment() !== 'production') {
-        $this-&gt;app-&gt;register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-    }
-    // ...
-}
+<p>3.接下来有两种安装方式，一种是默认安装，另一种是自定义安装，我这里选择的是默认安装，执行目录里的安装脚本即可：</p>
+<pre><code>./rebuild.sh
 </code></pre>
-<h4 id="facades生成phpdoc在项目会生成一个_ide_helperphp文件">facades生成phpDoc，在项目会生成一个_ide_helper.php文件</h4>
-<pre><code>php artisan ide-helper:generate
+<p>安装完成之后会返回一个文件目录，里面有一个后面配置需要的文件<strong>xdebug.so</strong>
+4.在php.ini中添加xdebug扩展
+正常情况下实在在php.ini文件默认添加xdebug配置参数</p>
+<pre><code>zend_extension=xdebug.so    //这里填写正确的文件路径
+xdebug.idekey = &quot;vagrant&quot;
+xdebug.default_enable = 1
+xdebug.remote_connect_back = 1
+xdebug.remote_port = 9001
+xdebug.remote_enable = 1
+xdebug.remote_autostart = 1
+xdebug.remote_handler=&quot;dbgp&quot;
 </code></pre>
-<p>这样就完成全部安装，prefect！👏</p>
-<h3 id="二-laravel-debugbar">二、Laravel Debugbar</h3>
-<p>以前用tp开发的时候，都会用到调试工具栏，laravel怎么可能没有，而且比trace好看多了，哈哈哈~ 😎</p>
-<h4 id="使用composer安装">使用composer安装：</h4>
-<pre><code>composer require barryvdh/laravel-debugbar --dev
-</code></pre>
-<h4 id="将服务提供者类添加到configappphp中的provider数组">将服务提供者类添加到config/app.php中的provider数组</h4>
-<pre><code>Barryvdh\Debugbar\ServiceProvider::class,
-</code></pre>
-<h4 id="如果要使用facade记录消息请将其添加到appphp中的外观中">如果要使用Facade记录消息，请将其添加到app.php中的外观中：</h4>
-<pre><code>'Debugbar' =&gt; Barryvdh\Debugbar\Facade::class,
-</code></pre>
-<p>最后，确定配置中APP_DEBUG是true，在浏览器访问项目就可以使用了</p>
+<p>在homestead中，已经帮有我们需要的xdebug配置文件
+<img src="https://jianpantx.github.io/post-images/1555774462904.png" alt="">
+只需在20-xdebug.ini修改对应参数即可，如果想添加在php.ini话，要把这个文件里的参数注释，不然会发生冲突（排这个坑花了好长时间😭）。</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="tag">
-                    php
-                  </a>
-                
-                  <a href="https://jianpantx.github.io/tag/laravel" class="tag">
-                    laravel
-                  </a>
-                
-                  <a href="https://jianpantx.github.io/tag/phpstrom" class="tag">
-                    phpstorm
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://jianpantx.github.io/post/1">
+                <a href="https://jianpantx.github.io/post/3">
                   <h3 class="post-title">
-                    博客的第一篇文章
+                    在开发中遇到关于PHP_EOL的问题
                   </h3>
                 </a>
               </div>
