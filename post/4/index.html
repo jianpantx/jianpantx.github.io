@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1555846535379">
+<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1555847315576">
 <link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
 
 
@@ -44,7 +44,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://jianpantx.github.io">
-        <img src="https://jianpantx.github.io/images/avatar.png?v=1555846535379" class="site-logo">
+        <img src="https://jianpantx.github.io/images/avatar.png?v=1555847315576" class="site-logo">
         <h1 class="site-title">键盘同学</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -113,6 +113,9 @@
             <h2 class="post-title">vagrant+homestead+phpstorm+xdebug调试laravel</h2>
             <div class="post-date">2019-04-20</div>
             
+              <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/4.jpg')">
+              </div>
+            
             <div class="post-content">
               <p>🐱‍👤Xdebug是php的调试神器，之前也安装使用过，但是本地开发环境是phpstudy。现在基本上都在用vagrant+homestead来本地开发，所以本文是针对homestead环境，其他环境就自行google...😝</p>
 <!-- more -->
@@ -176,6 +179,22 @@ phpstorm开启监听
 <img src="https://jianpantx.github.io/post-images/1555846296801.png" alt="">
 跟浏览器调试不同的是，内部调用是在地址上传了一个XDEBUG_SESSION_START，而浏览器调试是在cookie里面传了一个XDEBUG_SESSION，其他都一样。</p>
 <p><img src="https://jianpantx.github.io/post-images/1555846482918.png" alt=""></p>
+<h3 id="介绍一下两种通知客户端的方式">介绍一下两种通知客户端的方式：</h3>
+<h4 id="第一种静态绑定客户端-host">第一种，静态绑定客户端 host</h4>
+<p>xdebug.remote_connect_back = 0 ，也是 xdebug 的默认方式，这种情况下，xdebug 在收到调试通知时会读取配置 xdebug.remote_host 和 xdebug.remote_port ，默认是 localhost:9000，然后向这个端口发送通知
+<img src="https://jianpantx.github.io/post-images/1555846976545.gif" alt=""></p>
+<blockquote>
+<p>可以看到，remote_host 的 IP 是固定的，这种方式只适合单一客户端开发调试</p>
+</blockquote>
+<h4 id="第二种不绑定-ip根据请求来源通知">第二种，不绑定 IP，根据请求来源通知</h4>
+<p>xdebug.remote_connect_back = 1，这种方式和上面基本相同，唯一不同的是，php 在 接受 http 请求后，xdebug 会将请求来源的 IP 绑定，并通知
+<img src="https://jianpantx.github.io/post-images/1555847030849.gif" alt=""></p>
+<blockquote>
+<p>以上就是所有 xdebug 工作原理相关的介绍，下一篇讲在 homestead + phpstorm 作为开发环境如何具体配置并使用 xdebug</p>
+</blockquote>
+<p>参考链接</p>
+<p><a href=""></a>https://juejin.im/entry/59cba7066fb9a00a4d53f6d3
+<a href=""></a>https://learnku.com/articles/4090/the-first-step-to-becoming-a-senior-php-programmer-debugging-xdebug-principle</p>
 
             </div>
             
