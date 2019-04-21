@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1555774854734">
+<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1555846535379">
 <link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
 
 
@@ -44,7 +44,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://jianpantx.github.io">
-        <img src="https://jianpantx.github.io/images/avatar.png?v=1555774854734" class="site-logo">
+        <img src="https://jianpantx.github.io/images/avatar.png?v=1555846535379" class="site-logo">
         <h1 class="site-title">键盘同学</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -114,9 +114,9 @@
             <div class="post-date">2019-04-20</div>
             
             <div class="post-content">
-              <p>🐱‍👤Xdebug是php的调试神器，之前也安装使用过，但是本地开发环境是phpstudy。现在基本上都在用vagrant+homestead来本地开发，所以要重新搭。在安装过程中，也是踩了好几个坑，装好的时候心里是奔溃的...</p>
+              <p>🐱‍👤Xdebug是php的调试神器，之前也安装使用过，但是本地开发环境是phpstudy。现在基本上都在用vagrant+homestead来本地开发，所以本文是针对homestead环境，其他环境就自行google...😝</p>
 <!-- more -->
-<h3 id="xdebug安装">Xdebug安装</h3>
+<h2 id="xdebug安装">Xdebug安装</h2>
 <ol>
 <li>首先用git拉取源码安装</li>
 </ol>
@@ -131,22 +131,61 @@
 <pre><code>./rebuild.sh
 </code></pre>
 <p>安装完成之后会返回一个文件目录，里面有一个后面配置需要的文件<strong>xdebug.so</strong>
-4.在php.ini中添加xdebug扩展
-正常情况下实在在php.ini文件默认添加xdebug配置参数</p>
-<pre><code>zend_extension=xdebug.so    //这里填写正确的文件路径
-xdebug.idekey = &quot;vagrant&quot;
-xdebug.default_enable = 1
+4.在php.ini中添加xdebug扩展（需要对应php的版本）
+php会通过两种方式运行，fpm和命令行cli，所有会有两个php.ini配置文件，我们添加的xdebug扩展配置会添加在mod-available这个文件夹里，然后通过软连接的方式，连接到fpm和cli里的配置文件夹。
+mods-available文件家
+<img src="https://jianpantx.github.io/post-images/1555828608456.png" alt="">
+cli/conf.d 配置文件夹
+<img src="https://jianpantx.github.io/post-images/1555828673187.png" alt="">
+fpm/conf.d配置文件家
+<img src="https://jianpantx.github.io/post-images/1555828695963.png" alt=""></p>
+<p>mods-available/xdebug.ini配置信息，建议修改默认的端口9000，防止与fpm的端口9000冲突</p>
+<pre><code>zend_extension=/usr/lib/php/20170718/xdebug.so
+xdebug.remote_enable = 1
 xdebug.remote_connect_back = 1
 xdebug.remote_port = 9001
-xdebug.remote_enable = 1
-xdebug.remote_autostart = 1
-xdebug.remote_handler=&quot;dbgp&quot;
+xdebug.max_nesting_level = 512
 </code></pre>
-<p>在homestead中，已经帮有我们需要的xdebug配置文件
-<img src="https://jianpantx.github.io/post-images/1555774462904.png" alt="">
-只需在20-xdebug.ini修改对应参数即可，如果想添加在php.ini话，要把这个文件里的参数注释，不然会发生冲突（排这个坑花了好长时间😭）。</p>
+<p>这样就安装好xdebug扩展了</p>
+<h2 id="配置phpstorm">配置phpstorm</h2>
+<p>用xdebug调试的方式有两种，一种是通过浏览器安装xdebug helper插件，通过浏览器请求；另外一种是配置服务器，内部调用。原理都是通过传递XDEBUG_SESSION，来开启xdebug。下面先把phpstorm的监听端口配置好，我用的9001
+<img src="https://jianpantx.github.io/post-images/1555841023596.png" alt=""></p>
+<h4 id="游览器插件调试">游览器插件调试</h4>
+<p>浏览器安装插件
+<img src="https://jianpantx.github.io/post-images/1555840851767.png" alt="">
+开启插件调试功能
+<img src="https://jianpantx.github.io/post-images/1555841236889.png" alt="">
+设置断点
+<img src="https://jianpantx.github.io/post-images/1555841398250.png" alt="">
+phpstorm开启监听
+<img src="https://jianpantx.github.io/post-images/1555841990853.png" alt="">
+浏览器访问项目，断点成功，控制台输出
+<img src="https://jianpantx.github.io/post-images/1555841433436.png" alt="">
+<img src="https://jianpantx.github.io/post-images/1555841521249.png" alt=""></p>
+<h4 id="内部调用调试">内部调用调试</h4>
+<p>先在添加CLI Interpreter
+<img src="https://jianpantx.github.io/post-images/1555845535317.png" alt="">
+左上角添加➕
+<img src="https://jianpantx.github.io/post-images/1555845633537.png" alt="">
+根据自身情况添加配置
+<img src="https://jianpantx.github.io/post-images/1555845685531.png" alt=""></p>
+<p>添加服务器，填写配置
+<img src="https://jianpantx.github.io/post-images/1555845923075.png" alt="">
+这样就配置好了
+打好测试断点，选择配置好的项目，点击红色甲壳虫，开始调试。
+<img src="https://jianpantx.github.io/post-images/1555846296801.png" alt="">
+跟浏览器调试不同的是，内部调用是在地址上传了一个XDEBUG_SESSION_START，而浏览器调试是在cookie里面传了一个XDEBUG_SESSION，其他都一样。</p>
+<p><img src="https://jianpantx.github.io/post-images/1555846482918.png" alt=""></p>
 
             </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://jianpantx.github.io/tag/phpstrom" class="tag">
+                    phpstorm
+                  </a>
+                
+              </div>
             
             
               <div class="next-post">
