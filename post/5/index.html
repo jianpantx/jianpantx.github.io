@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>在开发中遇到关于PHP_EOL的问题 | 键盘同学</title>
+<title>php字符串函数trim、ltrim、rtrim第二个参数的使用 | 键盘同学</title>
 <meta name="description" content="刻意练习，只有变秃才能变强">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -110,34 +110,75 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">在开发中遇到关于PHP_EOL的问题</h2>
-            <div class="post-date">2019-04-19</div>
+            <h2 class="post-title">php字符串函数trim、ltrim、rtrim第二个参数的使用</h2>
+            <div class="post-date">2019-04-22</div>
             
-              <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/3.png')">
+              <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/5.png')">
               </div>
             
             <div class="post-content">
-              <p>✔今天在开发中遇到PHP_EOL不换行的问题，之前只知道是用于换行，是php的一个预定义常量，对PHP_EOL的使用也没什么研究。今天把自己的查阅结果记录下来，加深一下记忆。</p>
+              <p>✒在看laravel源码的时候，看到这个函数第二个参数的用法，有点陌生，于是查看了php官网的手册，把这个知识盲区记录下来。</p>
 <!-- more -->
-<p>首先，PHP_EOL在不同平台输出的结果是不一样的</p>
-<pre><code>echo PHP_EOL;
-//windows平台相当于    echo &quot;\r\n&quot;;
-//unix\linux平台相当于    echo &quot;\n&quot;;
-//mac平台相当于    echo &quot;\r&quot;;
+<h3 id="官方说明">官方说明</h3>
+<pre><code>trim ( string $str [, string $character_mask = &quot; \t\n\r\0\x0B&quot; ] ) : string
 </code></pre>
-<p>PHP_EOL的目的是自动为不同平台选择正确的字符，在终端上显示是可以正常的，但如果是在浏览器html则不能换行，是一个空格的效果。你需要在使用<code>&lt;pre&gt;</code>，或者使用php提供了nl2br这个字符串函数，能对字符串中所有新行之前插入<code>&lt;br&gt;</code>或<code>&lt;br /&gt;</code>,效果看上去就是把<code>\n、\r\n、\r</code>替换，达到目标效果。</p>
+<blockquote>
+<p>此函数返回字符串 str 去除首尾空白字符后的结果。如果不指定第二个参数，trim() 将去除这些字符：</p>
+<p>&quot; &quot; (ASCII 32 (0x20))，普通空格符。
+&quot;\t&quot; (ASCII 9 (0x09))，制表符。
+&quot;\n&quot; (ASCII 10 (0x0A))，换行符。
+&quot;\r&quot; (ASCII 13 (0x0D))，回车符。
+&quot;\0&quot; (ASCII 0 (0x00))，空字节符。
+&quot;\x0B&quot; (ASCII 11 (0x0B))，垂直制表符。</p>
+</blockquote>
+<h3 id="参数">参数</h3>
+<blockquote>
+<p>str
+待处理的字符串。</p>
+<p>character_mask
+可选参数，过滤字符也可由 character_mask 参数指定。一般要列出所有希望过滤的字符，也可以使用 “..” 列出一个字符范围。</p>
+</blockquote>
+<p>###官方范例</p>
 <pre><code>&lt;?php
-$a =  'hello'.PHP_EOL.'world';
 
-echo $a;
-echo '&lt;hr /&gt;';
-echo nl2br($a);
-echo '&lt;hr /&gt;';
-echo '&lt;pre&gt;';
-echo $a;
+$text   = &quot;\t\tThese are a few words :) ...  &quot;;
+$binary = &quot;\x09Example string\x0A&quot;;
+$hello  = &quot;Hello World&quot;;
+var_dump($text, $binary, $hello);
+
+print &quot;\n&quot;;
+
+$trimmed = trim($text);
+var_dump($trimmed);
+
+$trimmed = trim($text, &quot; \t.&quot;);
+var_dump($trimmed);
+
+$trimmed = trim($hello, &quot;Hdle&quot;);
+var_dump($trimmed);
+
+// 清除 $binary 首位的 ASCII 控制字符
+// （包括 0-31）
+$clean = trim($binary, &quot;\x00..\x1F&quot;);
+var_dump($clean);
+
+?&gt;
 </code></pre>
-<p>输出结果：
-<img src="https://jianpantx.github.io/post-images/1555675861342.png" alt=""></p>
+<h4 id="输出">输出</h4>
+<pre><code>string(32) &quot;        These are a few words :) ...  &quot;
+string(16) &quot;    Example string
+&quot;
+string(11) &quot;Hello World&quot;
+
+string(28) &quot;These are a few words :) ...&quot;
+string(24) &quot;These are a few words :)&quot;
+string(5) &quot;o Wor&quot;
+string(14) &quot;Example string&quot;
+</code></pre>
+<p>例子中```trim($hello,&quot;Hdle&quot;)有点特殊，一开始看也没有理解，查了资料才明白，下面是我的理解：</p>
+<blockquote>
+<p>函数不会对Hdle整个去字符串匹配来去除，而是按照H、d、l、e一个个字符去匹配去除，直到没有匹配的数字就停止，H、d、l、e就像一个列表，trim会从$hello字符串的两端一个字符去这个列表匹配，有就去除过滤掉，没有就停止。ltrim和rtrim也是同样的道理，知道方向的区别。</p>
+</blockquote>
 
             </div>
             
@@ -152,9 +193,9 @@ echo $a;
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://jianpantx.github.io/post/2">
+                <a href="https://jianpantx.github.io/post/4">
                   <h3 class="post-title">
-                    laravel项目中提高phpstorm开发效率的扩展和插件
+                    vagrant+homestead+phpstorm+xdebug调试项目
                   </h3>
                 </a>
               </div>
