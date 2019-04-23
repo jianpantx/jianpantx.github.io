@@ -1,203 +1,181 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
-<title>php | 键盘同学</title>
-<meta name="description" content="刻意练习，只有变秃才能变强">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>php | 废材一个</title>
+<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1556034220729">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1555945750015">
 <link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-138571597-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-138571597-1');
-</script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
 
 
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://jianpantx.github.io">
-        <img src="https://jianpantx.github.io/images/avatar.png?v=1555945750015" class="site-logo">
-        <h1 class="site-title">键盘同学</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://jianpantx.github.io">
+  <img class="avatar" src="https://jianpantx.github.io/images/avatar.png?v=1556034220729" alt="">
+  </a>
+  <h1 class="site-title">
+    废材一个
+  </h1>
+  <p class="site-description">
+    刻意练习，只有变秃才能变强
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
-          <a class="social-link" href="https://github.com/jianpantx" target="_blank">
-            <i class="fab fa-github"></i>
-          </a>
-        
+        <a href="https://github.com/jianpantx" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-    </div>
-    <div class="site-description">
-      刻意练习，只有变秃才能变强
-    </div>
-    <div class="site-footer">
-      
-    </div>
+    
   </div>
 </div>
 
+        <div class="current-tag-container">
+            <h2 class="title">
+                标签：#php
+            </h2> 
+        </div>
+        <div class="post-container">
+  
+    <article class="post">
+      <a href="https://jianpantx.github.io/post/5">
+        <h2 class="post-title">php字符串函数trim、ltrim、rtrim第二个参数的使用</h2>
+      </a>
+      <div class="post-info">
+        <time class="post-time">
+          · 2019-04-22 ·
+        </time>
+        
+          <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="post-tag">
+            # php
+          </a>
+        
+      </div>
+      
+        <a href="https://jianpantx.github.io/post/5" class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/5.png')">
+        </a>
+      
+      <div class="post-abstract">
+        <p>✒在看laravel源码的时候，看到这个函数第二个参数的用法，有点陌生，于是查看了php官网的手册，把这个知识盲区记录下来。</p>
 
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: php</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://jianpantx.github.io/post/5">
-                  <h2 class="post-title">php字符串函数trim、ltrim、rtrim第二个参数的使用</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-22
-                </div>
-                <div class="post-abstract">
-                  <p>✒在看laravel源码的时候，看到这个函数第二个参数的用法，有点陌生，于是查看了php官网的手册，把这个知识盲区记录下来。</p>
+      </di>
+    </article>
+  
+    <article class="post">
+      <a href="https://jianpantx.github.io/post/3">
+        <h2 class="post-title">在开发中遇到关于PHP_EOL的问题</h2>
+      </a>
+      <div class="post-info">
+        <time class="post-time">
+          · 2019-04-19 ·
+        </time>
+        
+          <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="post-tag">
+            # php
+          </a>
+        
+      </div>
+      
+        <a href="https://jianpantx.github.io/post/3" class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/3.png')">
+        </a>
+      
+      <div class="post-abstract">
+        <p>✔今天在开发中遇到PHP_EOL不换行的问题，之前只知道是用于换行，是php的一个预定义常量，对PHP_EOL的使用也没什么研究。今天把自己的查阅结果记录下来，加深一下记忆。</p>
 
-                </div>
-              </div>
-              
-                <a class="right" href="https://jianpantx.github.io/post/5">
-                  <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/5.png')">
-                  </div>
-                </a>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://jianpantx.github.io/post/3">
-                  <h2 class="post-title">在开发中遇到关于PHP_EOL的问题</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-19
-                </div>
-                <div class="post-abstract">
-                  <p>✔今天在开发中遇到PHP_EOL不换行的问题，之前只知道是用于换行，是php的一个预定义常量，对PHP_EOL的使用也没什么研究。今天把自己的查阅结果记录下来，加深一下记忆。</p>
-
-                </div>
-              </div>
-              
-                <a class="right" href="https://jianpantx.github.io/post/3">
-                  <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/3.png')">
-                  </div>
-                </a>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://jianpantx.github.io/post/2">
-                  <h2 class="post-title">laravel项目中提高phpstorm开发效率的扩展和插件</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-18
-                </div>
-                <div class="post-abstract">
-                  <p>🎈文章会列出一些在phpstorm开发中可以给我带来许多phpstorm插件和开发laravel的扩展，会不断补充和修改
+      </di>
+    </article>
+  
+    <article class="post">
+      <a href="https://jianpantx.github.io/post/2">
+        <h2 class="post-title">laravel项目中提高phpstorm开发效率的扩展和插件</h2>
+      </a>
+      <div class="post-info">
+        <time class="post-time">
+          · 2019-04-18 ·
+        </time>
+        
+          <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="post-tag">
+            # php
+          </a>
+        
+          <a href="https://jianpantx.github.io/tag/laravel" class="post-tag">
+            # laravel
+          </a>
+        
+          <a href="https://jianpantx.github.io/tag/phpstrom" class="post-tag">
+            # phpstorm
+          </a>
+        
+      </div>
+      
+        <a href="https://jianpantx.github.io/post/2" class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/2.jpg')">
+        </a>
+      
+      <div class="post-abstract">
+        <p>🎈文章会列出一些在phpstorm开发中可以给我带来许多phpstorm插件和开发laravel的扩展，会不断补充和修改
 下面是我自己phpstorm中使用的插件</p>
 
-                </div>
-              </div>
-              
-                <a class="right" href="https://jianpantx.github.io/post/2">
-                  <div class="feature-container" style="background-image: url('https://jianpantx.github.io/post-images/2.jpg')">
-                  </div>
-                </a>
-              
-            </article>
-          
+      </di>
+    </article>
+  
+</div>
 
-          <div class="pagination-container">
+        <div class="pagination-container">
   
   
 </div>
 
-        </div>
-      </div>
-    </div>
+        <div class="site-footer">
+  
+</div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
-<script type="application/javascript">
-
-AOS.init();
-
-hljs.initHighlightingOnLoad()
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
+<script>
+  hljs.initHighlightingOnLoad()
 </script>
 
-
-
-
+      </div>
+    </div>
   </body>
 </html>
