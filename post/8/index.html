@@ -1,0 +1,207 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mysql5.7 group by的问题 | 键盘同学</title>
+<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1558030105525">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://jianpantx.github.io">
+  <img class="avatar" src="https://jianpantx.github.io/images/avatar.png?v=1558030105525" alt="">
+  </a>
+  <h1 class="site-title">
+    键盘同学
+  </h1>
+  <p class="site-description">
+    刻意练习，日渐精进
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/jianpantx" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+      
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              mysql5.7 group by的问题
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-05-17 ·
+              </time>
+              
+                <a href="https://jianpantx.github.io/tag/cotq3o8ns" class="post-tags">
+                  # mysql
+                </a>
+              
+            </div>
+            
+              <div class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/8.png')">
+              </div>
+            
+            <div class="post-content">
+              <p>关于mysql5.6和5.7在不改默认配置的情况下，group by的问题</p>
+<p>测试数据，salary(工资) deparment_no(部门编号)
+<img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-16/5cdd34878bb69.png" alt=""></p>
+<p>执行的sql语句，查出每个部门工资最高的人</p>
+<pre><code>select
+ department_no,name,MAX(salary)
+FROM
+ test_
+GROUP BY
+ department_no
+
+</code></pre>
+<p>在mysql5.6中的执行结果</p>
+<p><img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdda210585b9.png" alt=""></p>
+<p>在mysql5.7.24中执行的结果</p>
+<p><img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdda1ed5dd9e.png" alt=""></p>
+<p>低一些的版本可能输出的结果是</p>
+<pre><code>+--------+-------------+--------+
+| department_no | name | salary |
++---------------+----- +--------+
+|     10        | 1001 | 100.00 |
+|     20        | 1003 | 300.00 |
+|     30        | 1005 | 500.00 |
++--------+-------------+--------+
+</code></pre>
+<p>这跟mysql配置文件里sql_mode有关，在5.7.5以前的版本中sql_mode是默认不开启ONLY_FULL_GROUP_BY,而之后的版本都会默认开启。
+mysql5.6：
+<img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd8ef603b89.png" alt="">
+mysql5.7
+<img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd8f1d60e0b.png" alt=""></p>
+<p>开启了ONLY_FULL_GROUP_BY,mysql将不允许查询未在group by子句中命名的非聚合列。</p>
+<pre><code>select
+ department_no,name,MAX(salary) //salary使用了MAX聚合函数，聚合列；department_no，命名列
+FROM
+ test_
+GROUP BY
+ department_no
+</code></pre>
+<p>上述sql语句中查询了name这个既不是命名列，也不是聚合列，则会查询报错。
+<img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd931a1d2f0.png" alt=""></p>
+<h3 id="解决办法">解决办法：</h3>
+<p>方法一：关闭ONLY_FULL_GROUP_BY</p>
+<pre><code>set @@sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+</code></pre>
+<p>方法二：不关闭ONLY_FULL_GROUP_BY, 时 select字段必须都在group by分组条件内（含有函数的字段除外）
+方法三：使用ANY_VALUE()函数</p>
+<pre><code>select
+ department_no,ANY_VALUE(name),MAX(salary)
+FROM
+ test_
+GROUP BY
+ department_no
+</code></pre>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_only_full_group_by" title="https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_only_full_group_by">https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_only_full_group_by</a>
+<a href="https://dev.mysql.com/doc/refman/5.7/en/group-by-handling.html" title="https://dev.mysql.com/doc/refman/5.7/en/group-by-handling.html">https://dev.mysql.com/doc/refman/5.7/en/group-by-handling.html</a></p>
+
+            </div>
+          </article>
+        </div>
+    
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://jianpantx.github.io/post/7">
+              <h3 class="post-title">
+                centos7 yum源安装lamp环境
+              </h3>
+            </a>
+          </div>  
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '12b09a701e2f9fc1bf79',
+    clientSecret: 'ee0e634fd29019bb6d0b6d9cd3d4b88e0016ecee',
+    repo: 'jianpantx.github.io',
+    owner: 'jianpantx',
+    admin: ['jianpantx'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+    
+        <div class="site-footer">
+  
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
