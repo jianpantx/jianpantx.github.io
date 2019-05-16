@@ -1,0 +1,218 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>centos7 yum源安装lamp环境 | 键盘同学</title>
+<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1557997269123">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://jianpantx.github.io">
+  <img class="avatar" src="https://jianpantx.github.io/images/avatar.png?v=1557997269123" alt="">
+  </a>
+  <h1 class="site-title">
+    键盘同学
+  </h1>
+  <p class="site-description">
+    刻意练习，日渐精进
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/jianpantx" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+      
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              centos7 yum源安装lamp环境
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-05-16 ·
+              </time>
+              
+                <a href="https://jianpantx.github.io/tag/cotq3o8ns" class="post-tags">
+                  # mysql
+                </a>
+              
+                <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="post-tags">
+                  # php
+                </a>
+              
+            </div>
+            
+              <div class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/7.png')">
+              </div>
+            
+            <div class="post-content">
+              <p>|  序号 | 作者  | 更新内容 | 时间 |
+| ------------ | ------------ |
+|  1 |  键盘 | 创建文档 | 2018-12-7 15:00 |
+##安装apache httpd
+###1.进入apache官网，执行安装步骤
+<img src="http://doc.netmi.com.cn/server/../Public/Uploads/2018-12-07/5c0a089fa5a76.png" alt="">
+###可能的问题
+<img src="http://doc.netmi.com.cn/server/../Public/Uploads/2018-12-07/5c0a0079bcbb6.png" alt="">
+修改httpd.conf文件，修改ServerName，并重启apache
+<img src="http://doc.netmi.com.cn/server/../Public/Uploads/2018-12-07/5c0a02177cb24.png" alt="">
+##安装php<br>
+###1.如果之前已经安装我们先卸载一下
+<code>yum -y remove php*</code>
+###2.由于linux的yum源不存在php7.x，所以我们要更改yum源
+<code>rpm -Uvh https://mirror.webtatic.com/yum/el7/epel-release.rpm</code>
+<code>rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm</code>
+###3.yum 安装php72w和各种拓展，选自己需要的即可</p>
+<pre><code>yum -y install php72w php72w-cli php72w-common php72w-devel php72w-embedded php72w-fpm php72w-gd php72w-mbstring php72w-mysqlnd php72w-opcache php72w-pdo php72w-xml
+</code></pre>
+<p>###4. 更新apache httpd.conf配置
+因为使用的是php-fpm
+如果php-fpm使用的是TCP socket，那么在httpd.conf末尾加上：</p>
+<pre><code>&lt;FilesMatch \.php$&gt;
+         SetHandler &quot;proxy:fcgi://127.0.0.1:9000&quot;
+&lt;/FilesMatch&gt;
+</code></pre>
+<p>###5.配置结束，重启apache，启动php-fpm</p>
+<pre><code>service php-fpm start
+service httpd restart
+</code></pre>
+<p>###6.可能的问题
+<img src="http://doc.netmi.com.cn/server/../Public/Uploads/2018-12-07/5c09e8185e4cc.png" alt="">
+由于缺少gcc包，执行安装
+<code>yum install gcc gcc-c++</code>
+##安装mysql
+###1.手动编辑手动编辑保存/etc/yum.repos.d/mysql-community.repo 文件来选择发布系列
+<code>shell&gt; vim /etc/yum.repos.d/mysql-community.repo</code>
+添加一下内容</p>
+<pre><code>[mysql57-community]
+name=MySQL 5.7 Community Server
+baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/7/$basearch/
+enabled=1
+gpgcheck=0
+</code></pre>
+<p>###2.安装mysql, 并开启mysql
+<code>shell&gt; sudo yum install mysql-community-server</code>
+<code>shell&gt; service mysqld start</code>
+###3.获取mysql密码
+在服务器初始启动时，如果服务器的数据目录为空，则会发生以下情况：</p>
+<p>服务器已初始化。</p>
+<p>SSL证书和密钥文件在数据目录中生成。</p>
+<p>validate_password 已安装并已启用。</p>
+<p>将'root'@'localhost创建一个超级用户帐户。设置超级用户的密码并将其存储在错误日志文件中。要显示它，请使用以下命令</p>
+<p><code>shell&gt; sudo grep 'temporary password' /var/log/mysqld.log</code>
+###4. 登录mysql 修改密码更新为自己的</p>
+<p><code>mysql&gt; ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!';</code>
+5.6版本修改密码
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('mypassword');
+###5. 更新允许远程连接</p>
+<pre><code>mysql&gt;GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'youpassword' WITH GRANT OPTION;
+重载授权表：
+FLUSH PRIVILEGES;
+</code></pre>
+
+            </div>
+          </article>
+        </div>
+    
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://jianpantx.github.io/post/5">
+              <h3 class="post-title">
+                php字符串函数trim、ltrim、rtrim第二个参数的使用
+              </h3>
+            </a>
+          </div>  
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '12b09a701e2f9fc1bf79',
+    clientSecret: 'ee0e634fd29019bb6d0b6d9cd3d4b88e0016ecee',
+    repo: 'jianpantx.github.io',
+    owner: 'jianpantx',
+    admin: ['jianpantx'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+    
+        <div class="site-footer">
+  
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
