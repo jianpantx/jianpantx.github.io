@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>mysql5.7 group by的问题 | 键盘同学</title>
-<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1558030124097">
+<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1558062511981">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
 
@@ -18,7 +18,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://jianpantx.github.io">
-  <img class="avatar" src="https://jianpantx.github.io/images/avatar.png?v=1558030124097" alt="">
+  <img class="avatar" src="https://jianpantx.github.io/images/avatar.png?v=1558062511981" alt="">
   </a>
   <h1 class="site-title">
     键盘同学
@@ -95,8 +95,8 @@
             <div class="post-content">
               <p>关于mysql5.6和5.7在不改默认配置的情况下，group by的问题</p>
 <!-- more -->
-<p>测试数据，salary(工资) deparment_no(部门编号)
-<img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-16/5cdd34878bb69.png" alt=""></p>
+<p>测试数据，salary(工资) deparment_no(部门编号)</p>
+<p><img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-16/5cdd34878bb69.png" alt=""></p>
 <p>执行的sql语句，查出每个部门工资最高的人</p>
 <pre><code>select
  department_no,name,MAX(salary)
@@ -119,11 +119,11 @@ GROUP BY
 |     30        | 1005 | 500.00 |
 +--------+-------------+--------+
 </code></pre>
-<p>这跟mysql配置文件里sql_mode有关，在5.7.5以前的版本中sql_mode是默认不开启ONLY_FULL_GROUP_BY,而之后的版本都会默认开启。
-mysql5.6：
-<img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd8ef603b89.png" alt="">
-mysql5.7
-<img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd8f1d60e0b.png" alt=""></p>
+<p>这跟mysql配置文件里sql_mode有关，在5.7.5以前的版本中sql_mode是默认不开启ONLY_FULL_GROUP_BY,而之后的版本都会默认开启。</p>
+<p>mysql5.6：</p>
+<p><img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd8ef603b89.png" alt=""></p>
+<p>mysql5.7</p>
+<p><img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd8f1d60e0b.png" alt=""></p>
 <p>开启了ONLY_FULL_GROUP_BY,mysql将不允许查询未在group by子句中命名的非聚合列。</p>
 <pre><code>select
  department_no,name,MAX(salary) //salary使用了MAX聚合函数，聚合列；department_no，命名列
@@ -131,21 +131,23 @@ FROM
  test_
 GROUP BY
  department_no
+
 </code></pre>
-<p>上述sql语句中查询了name这个既不是命名列，也不是聚合列，则会查询报错。
-<img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd931a1d2f0.png" alt=""></p>
+<p>上述sql语句中查询了name这个既不是命名列，也不是聚合列，则会查询报错。</p>
+<p><img src="https://docs.end.wiki/server/../Public/Uploads/2019-05-17/5cdd931a1d2f0.png" alt=""></p>
 <h3 id="解决办法">解决办法：</h3>
 <p>方法一：关闭ONLY_FULL_GROUP_BY</p>
 <pre><code>set @@sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 </code></pre>
-<p>方法二：不关闭ONLY_FULL_GROUP_BY, 时 select字段必须都在group by分组条件内（含有函数的字段除外）
-方法三：使用ANY_VALUE()函数</p>
+<p>方法二：不关闭ONLY_FULL_GROUP_BY, 时 select字段必须都在group by分组条件内（含有函数的字段除外）</p>
+<p>方法三：使用ANY_VALUE()函数</p>
 <pre><code>select
  department_no,ANY_VALUE(name),MAX(salary)
 FROM
  test_
 GROUP BY
  department_no
+
 </code></pre>
 <h3 id="参考链接">参考链接：</h3>
 <p><a href="https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_only_full_group_by" title="https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_only_full_group_by">https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_only_full_group_by</a>
