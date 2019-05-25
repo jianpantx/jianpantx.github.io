@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>在开发中遇到关于PHP_EOL的问题 | 键盘同学</title>
+<title>无限级分类 | 键盘同学</title>
 <link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1558787509738">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
@@ -76,11 +76,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              在开发中遇到关于PHP_EOL的问题
+              无限级分类
             </h2>
             <div class="post-info">
               <time class="post-time">
-                · 2019-04-19 ·
+                · 2019-05-25 ·
               </time>
               
                 <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="post-tags">
@@ -89,31 +89,88 @@
               
             </div>
             
-              <div class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/3.png')">
+              <div class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/wu-xian-ji-fen-lei.png')">
               </div>
             
             <div class="post-content">
-              <p>✔今天在开发中遇到PHP_EOL不换行的问题，之前只知道是用于换行，是php的一个预定义常量，对PHP_EOL的使用也没什么研究。今天把自己的查阅结果记录下来，加深一下记忆。</p>
+              <p>php实现无限级分类通常有两种方式：递归和引用</p>
 <!-- more -->
-<p>首先，PHP_EOL在不同平台输出的结果是不一样的</p>
-<pre><code>echo PHP_EOL;
-//windows平台相当于    echo &quot;\r\n&quot;;
-//unix\linux平台相当于    echo &quot;\n&quot;;
-//mac平台相当于    echo &quot;\r&quot;;
+<pre><code>$array = [
+    ['id' =&gt; 1, 'pid' =&gt; 0, 'name' =&gt; '广东省'],
+    ['id' =&gt; 4, 'pid' =&gt; 1, 'name' =&gt; '茂名市'],
+    ['id' =&gt; 6, 'pid' =&gt; 4, 'name' =&gt; '高州'],
+];
 </code></pre>
-<p>PHP_EOL的目的是自动为不同平台选择正确的字符，在终端上显示是可以正常的，但如果是在浏览器html则不能换行，是一个空格的效果。你需要在使用<code>&lt;pre&gt;</code>，或者使用php提供了nl2br这个字符串函数，能对字符串中所有新行之前插入<code>&lt;br&gt;</code>或<code>&lt;br /&gt;</code>,效果看上去就是把<code>\n、\r\n、\r</code>替换，达到目标效果。</p>
-<pre><code>&lt;?php
-$a =  'hello'.PHP_EOL.'world';
-
-echo $a;
-echo '&lt;hr /&gt;';
-echo nl2br($a);
-echo '&lt;hr /&gt;';
-echo '&lt;pre&gt;';
-echo $a;
+<p>实现效果:</p>
+<pre><code>Array
+(
+    [0] =&gt; Array
+        (
+            [id] =&gt; 1
+            [pid] =&gt; 0
+            [name] =&gt; 广东省
+            [children] =&gt; Array
+                (
+                    [0] =&gt; Array
+                        (
+                            [id] =&gt; 4
+                            [pid] =&gt; 1
+                            [name] =&gt; 茂名市
+                            [children] =&gt; Array
+                                (
+                                    [0] =&gt; Array
+                                        (
+                                            [id] =&gt; 6
+                                            [pid] =&gt; 4
+                                            [name] =&gt; 高州
+                                        )
+                                )
+                        )
+                )
+        )
+)
 </code></pre>
-<p>输出结果：
-<img src="https://jianpantx.github.io/post-images/1555675861342.png" alt=""></p>
+<p>递归实现：</p>
+<pre><code>function getTree($array=[], $pid =0){
+    $list = [];
+		if(!is_array($array){return false;}
+    foreach ($array as $key =&gt; $value){
+        //第一次遍历,找到父节点为根节点的节点 也就是pid=0的节点
+        if ($value['pid'] == $pid){
+            //开始递归,查找父ID为该节点ID的节点,级别则为原级别+1
+            $value['son'] = getTree($array, $value['id']);
+            if ($value['children'] == null){
+                unset($value['son']);
+            }
+            //把数组放到list中
+            $list[] = $value;
+            //把这个节点从数组中移除,减少后续递归消耗
+            unset($array[$key]);
+        }
+    }
+    return $list;
+}
+</code></pre>
+<p>引用实现:</p>
+<pre><code>function getTree($arr){
+			if(!is_array($arr)){return false;}
+			$refer =[];
+			foreach($arr as $v){
+			    $refer[$v['id']] = $v;
+			}
+			
+			$tree = [];
+			foreach($refer as $v){
+			    if(isset($refer[$v['pid']])){
+					     $refer[$v['pid']]['children'][] = &amp;$refer[$v['id']];
+					}else{
+					     $tree[] = &amp;$refer[$v['id']];
+					}
+			}
+			
+			return $tree;
+}
+</code></pre>
 
             </div>
           </article>
@@ -122,9 +179,9 @@ echo $a;
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://jianpantx.github.io/post/2">
+            <a href="https://jianpantx.github.io/post/8">
               <h3 class="post-title">
-                laravel项目中提高phpstorm开发效率的扩展和插件
+                mysql5.7 group by的问题
               </h3>
             </a>
           </div>  
