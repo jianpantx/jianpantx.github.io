@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>array_map()、array_walk() | 键盘同学</title>
-<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1560415755425">
+<link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1560415932223">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
 
@@ -18,7 +18,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://jianpantx.github.io">
-  <img class="avatar" src="https://jianpantx.github.io/images/avatar.png?v=1560415755425" alt="">
+  <img class="avatar" src="https://jianpantx.github.io/images/avatar.png?v=1560415932223" alt="">
   </a>
   <h1 class="site-title">
     键盘同学
@@ -135,7 +135,7 @@ $array2 =['aa1'=&gt;'111','bb2'=&gt;'222'];
   }
 }
 </code></pre>
-<h3 id="array_maphttpswwwphpnetmanualzhfunctionarray-mapphp解决">(array_map())[https://www.php.net/manual/zh/function.array-map.php]解决：</h3>
+<h3 id="array_map"><a href="https://www.php.net/manual/zh/function.array-map.php">array_map()</a>解决：</h3>
 <pre><code>function getArr($v){
     global $array2;
     if(in_array($v['test'],$array2)){
@@ -146,7 +146,7 @@ $array2 =['aa1'=&gt;'111','bb2'=&gt;'222'];
 $b = array_map(&quot;getArr&quot;, $array1); //传入$array1遍历，值通过$v传入getArr函数，不在$array2中返回null，用array_filter过滤掉值为null的
 var_dump(array_filter($b));
 </code></pre>
-<h3 id="array_walkhttpswwwphpnetmanualzhfunctionarray-walkphp">(array_walk())[https://www.php.net/manual/zh/function.array-walk.php]</h3>
+<h3 id="array_walk"><a href="https://www.php.net/manual/zh/function.array-walk.php">array_walk()</a>解决：</h3>
 <pre><code>//  $new_arr = [];
 function getArr($item,$key,$arr){
     // static $new_arr=[];
