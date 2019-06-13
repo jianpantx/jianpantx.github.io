@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>无限级分类 | 键盘同学</title>
+<title>array_map()、array_walk() | 键盘同学</title>
 <link rel="shortcut icon" href="https://jianpantx.github.io/favicon.ico?v=1560415755425">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://jianpantx.github.io/styles/main.css">
@@ -76,11 +76,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              无限级分类
+              array_map()、array_walk()
             </h2>
             <div class="post-info">
               <time class="post-time">
-                · 2019-05-25 ·
+                · 2019-06-13 ·
               </time>
               
                 <a href="https://jianpantx.github.io/tag/YnQbA6K2b" class="post-tags">
@@ -89,88 +89,81 @@
               
             </div>
             
-              <div class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/wu-xian-ji-fen-lei.png')">
+              <div class="post-feature-image" style="background-image: url('https://jianpantx.github.io/post-images/array_maparray_walk.jpg')">
               </div>
             
             <div class="post-content">
-              <p>php实现无限级分类通常有两种方式：递归和引用</p>
+              <p>这是来自群里的小伙伴有个需求，帮忙解决并记录一下，有新的思路好添加对比</p>
 <!-- more -->
-<pre><code>$array = [
-    ['id' =&gt; 1, 'pid' =&gt; 0, 'name' =&gt; '广东省'],
-    ['id' =&gt; 4, 'pid' =&gt; 1, 'name' =&gt; '茂名市'],
-    ['id' =&gt; 6, 'pid' =&gt; 4, 'name' =&gt; '高州'],
-];
+<pre><code>$array1 = [
+       [
+           '11'=&gt;'v1',
+            'k2'=&gt;'v2',
+            'test'=&gt; '111',
+        ],
+        [
+            'k1'=&gt;'vv1',
+            'k2'=&gt;'vv2',
+            'test'=&gt;'222',
+        ],
+        [
+            'k1'=&gt;'vvv1',
+            'k2'=&gt;'vvv2',
+            'test'=&gt;'2313'
+        ]
+			];
+
+$array2 =['aa1'=&gt;'111','bb2'=&gt;'222'];
 </code></pre>
-<p>实现效果:</p>
-<pre><code>Array
-(
-    [0] =&gt; Array
-        (
-            [id] =&gt; 1
-            [pid] =&gt; 0
-            [name] =&gt; 广东省
-            [children] =&gt; Array
-                (
-                    [0] =&gt; Array
-                        (
-                            [id] =&gt; 4
-                            [pid] =&gt; 1
-                            [name] =&gt; 茂名市
-                            [children] =&gt; Array
-                                (
-                                    [0] =&gt; Array
-                                        (
-                                            [id] =&gt; 6
-                                            [pid] =&gt; 4
-                                            [name] =&gt; 高州
-                                        )
-                                )
-                        )
-                )
-        )
-)
+<p>需求就是获取array1中test的值，存在array2中的数组，结果如下:</p>
+<pre><code>array(2) {
+  [0]=&gt;array(3) {
+    [&quot;a1&quot;]=&gt;
+    string(2) &quot;v1&quot;
+    [&quot;a2&quot;]=&gt;
+    string(2) &quot;v2&quot;
+    [&quot;test&quot;]=&gt;
+    string(3) &quot;111&quot;
+  }
+  [1]=&gt;array(3) {
+    [&quot;b2&quot;]=&gt;
+    string(3) &quot;vv1&quot;
+    [&quot;b1&quot;]=&gt;
+    string(3) &quot;vv2&quot;
+    [&quot;test&quot;]=&gt;
+    string(3) &quot;222&quot;
+  }
+}
 </code></pre>
-<p>递归实现：</p>
-<pre><code>function getTree($array=[], $pid =0){
-    $list = [];
-		if(!is_array($array){return false;}
-    foreach ($array as $key =&gt; $value){
-        //第一次遍历,找到父节点为根节点的节点 也就是pid=0的节点
-        if ($value['pid'] == $pid){
-            //开始递归,查找父ID为该节点ID的节点,级别则为原级别+1
-            $value['son'] = getTree($array, $value['id']);
-            if ($value['children'] == null){
-                unset($value['son']);
-            }
-            //把数组放到list中
-            $list[] = $value;
-            //把这个节点从数组中移除,减少后续递归消耗
-            unset($array[$key]);
-        }
+<h3 id="array_maphttpswwwphpnetmanualzhfunctionarray-mapphp解决">(array_map())[https://www.php.net/manual/zh/function.array-map.php]解决：</h3>
+<pre><code>function getArr($v){
+    global $array2;
+    if(in_array($v['test'],$array2)){
+        return $v;
     }
-    return $list;
 }
+
+$b = array_map(&quot;getArr&quot;, $array1); //传入$array1遍历，值通过$v传入getArr函数，不在$array2中返回null，用array_filter过滤掉值为null的
+var_dump(array_filter($b));
 </code></pre>
-<p>引用实现:</p>
-<pre><code>function getTree($arr){
-			if(!is_array($arr)){return false;}
-			$refer =[];
-			foreach($arr as $v){
-			    $refer[$v['id']] = $v;
-			}
-			
-			$tree = [];
-			foreach($refer as $v){
-			    if(isset($refer[$v['pid']])){
-					     $refer[$v['pid']]['children'][] = &amp;$refer[$v['id']];
-					}else{
-					     $tree[] = &amp;$refer[$v['id']];
-					}
-			}
-			
-			return $tree;
+<h3 id="array_walkhttpswwwphpnetmanualzhfunctionarray-walkphp">(array_walk())[https://www.php.net/manual/zh/function.array-walk.php]</h3>
+<pre><code>//  $new_arr = [];
+function getArr($item,$key,$arr){
+    // static $new_arr=[];
+    global $array1;
+    if(!in_array($item['test'],$arr)){
+        // $new_arr[] =$item;
+        unset($array1[$key]);
+    }
+    //  var_dump(in_array($item['test'],$arr));
 }
+array_walk($array1,'getArr',$array2);
 </code></pre>
+<p>获取结果这里有两种方法：</p>
+<p>1、声明新数组，将符合的结果push进去</p>
+<p>2、将$array1不符合的数组unset掉</p>
+<h3 id="总结">总结</h3>
+<p>需要注意作用域的问题</p>
 
             </div>
           </article>
@@ -179,9 +172,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://jianpantx.github.io/post/8">
+            <a href="https://jianpantx.github.io/post/wu-xian-ji-fen-lei">
               <h3 class="post-title">
-                mysql5.7 group by的问题
+                无限级分类
               </h3>
             </a>
           </div>  
