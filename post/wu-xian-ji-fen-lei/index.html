@@ -132,15 +132,16 @@
 </code></pre>
 <p>递归实现：</p>
 <pre><code>function getTree($array=[], $pid =0){
+    if(!is_array($array)){return false;}
+    
     $list = [];
-		if(!is_array($array){return false;}
     foreach ($array as $key =&gt; $value){
         //第一次遍历,找到父节点为根节点的节点 也就是pid=0的节点
         if ($value['pid'] == $pid){
             //开始递归,查找父ID为该节点ID的节点,级别则为原级别+1
-            $value['son'] = getTree($array, $value['id']);
+            $value['children'] = getTree($array, $value['id']);
             if ($value['children'] == null){
-                unset($value['son']);
+                unset($value['children']);
             }
             //把数组放到list中
             $list[] = $value;
